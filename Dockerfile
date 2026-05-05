@@ -38,5 +38,7 @@ COPY init/40-claude.sh     /custom-cont-init.d/40-claude.sh
 COPY init/50-git-config.sh /custom-cont-init.d/50-git-config.sh
 RUN chmod +x /custom-cont-init.d/*.sh
 
-# Volta ao user padrão LinuxServer (init scripts rodam como root antes do switch)
-USER abc
+# Note: NÃO setar `USER abc` aqui. A imagem base lscr.io/linuxserver/code-server
+# inicia como root e usa s6-overlay pra rodar /custom-cont-init.d/ como root
+# antes de fazer drop pra abc no code-server. Adicionar `USER abc` aqui faz s6
+# iniciar como abc, init scripts não conseguem chown /config, tudo quebra.
